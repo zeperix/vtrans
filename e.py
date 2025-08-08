@@ -203,6 +203,11 @@ class OCRWorker(QThread):
         gray = ImageOps.grayscale(img)
         gray = ImageOps.autocontrast(gray)
         gray = gray.filter(ImageFilter.MedianFilter(size=3))
+        # Sharpen the image to enhance text edges for better OCR accuracy
+        try:
+            gray = gray.filter(ImageFilter.UnsharpMask(radius=1, percent=150))
+        except Exception:
+            pass
         return gray
 
     @lru_cache(maxsize=4096)

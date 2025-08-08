@@ -10,7 +10,11 @@ def make_window_clickthrough(hwnd):
     ctypes.windll.user32.SetWindowLongW(hwnd, -20, styles)
 
 def render_text_image(text, font_path="arial.ttf", font_size=48, text_color="red"):
-    font = ImageFont.truetype(font_path, font_size)
+    try:
+        font = ImageFont.truetype(font_path, font_size)
+    except OSError:
+        # Fallback to default font when the desired font is unavailable
+        font = ImageFont.load_default()
 
     # Calculate bounding box for plain text
     dummy_img = Image.new("RGBA", (1, 1))
